@@ -3,8 +3,8 @@ let lonRoutes = [];
 let eleRoutes = [];
 let speedRoutes = [];
 
-let xOff = 0.0;
-let yOff = 0.0
+let j = 0;
+let k = 0;
 
 let alpha;
 
@@ -45,7 +45,7 @@ let files = ['data/route_2021-11-09_1.49pm.gpx',
   'data/route_2022-02-16_1.51pm.gpx',
   'data/route_2022-02-19_6.04pm.gpx',
   'data/route_2022-02-21_4.41pm.gpx',
-  'data/route_2022-02-26_8.03pm.gpx',];
+  'data/route_2022-02-26_8.03pm.gpx'];
 
 // preload the data from the gpx files
 function preload() {
@@ -89,64 +89,31 @@ function readGPX(file) {
   return [latp, lonp, elep, speedp]
 }
 
-function dashedLine(x0, y0, x1, y1, numPts) {
-  beginShape(LINES);
-  for (let i = 0; i <= numPts; i++) {
-    let x = lerp(x0, x1, i / numPts);
-    let y = lerp(y0, y1, i / numPts);
-    vertex(x, y);
-  }
-  endShape();
-}
-
 function draw() {
-  fill(255);
-  for (let j = 0; j < lonRoutes.length; j++) {
-    for (let k = 0; k < lonRoutes[j].length; k++) {
-      // let xm = map(lonRoutes[j][k], -125, -67, 0, width);
-      // let ym = map(latRoutes[l][m], 50, 24, 0, height);
-      let xm1 = map(lonRoutes[j][k], -119, -117.4, 0, width);
-      let ym1 = map(latRoutes[j][k], 34.6, 33.5, 0, height);
-      let homeX = map(-118.2530476, -118.5, -117.4, 0, width);
-      let homeY = map(34.0859834, 34.3, 33.5, 0, height);
-      let ele = map(eleRoutes[j][k], 0, 1000, 0, height);
-      let speed = (map(speedRoutes[j][k], 0, 4, 0, .1));
-      // let xm2 = map(lonRoutes[j + 1][k + 1], -118.5, -117.6, 0, width);
-      // let ym2 = map(latRoutes[j + 1][k + 1], 34.2, 33.5, 0, height);
-      alpha = 10;
-      // let randColor = (random(360))
+  // noLoop();
+  // fill(255);
+  // for (let j = 0; j < lonRoutes.length; j++) {
+  //   for (let k = 0; k < lonRoutes[j].length; k++) {
+  let xm1 = map(lonRoutes[j][k], -119, -117.4, 0, width);
+  let ym1 = map(latRoutes[j][k], 34.6, 33.5, 0, height);
+  let ele = map(eleRoutes[j][k], 0, 1000, 0, height);
+  let speed = (map(speedRoutes[j][k]), 0, 4, 0, .1));
+  strokeWeight(speed);
+  alpha = 10;
+  stroke(map(ele, 0, 1000, 0, 360), 64, 100, alpha)
+  line(xm1, ym1, xm1, ym1 - ele * .1);
 
-      // strokeWeight(speed / 4);
-      xOff = xOff + 10;
-      yOff = yOff + 10;
-      // let yDisperse = noise(yOff);
-      // let xDisperse = noise(xOff);
-
-      strokeWeight(speed);
-      stroke(map(ele, 0, 1000, 0, 360), 64, 100, alpha)
-      line(xm1, ym1, xm1, ym1 - ele * .1);
-      // line(xm1, ym1, xm1 + xDisperse, ym1 + yDisperse);
-
-      point(xm1, ym1);
-      alpha = 5;
-      stroke(map(ele, 0, 1000, 0, 360), 64, 100, alpha)
-      // let lerpX = lerp(xm1, homeX, .1);
-      // let lerpY = lerp(ym1, homeY, .1);
-      // line(lerpX, lerpY, homeX, homeY);
-      // line(xm1, ym1, homeX, homeY);
-      // console.log(xm1, ym1);
-      // line(xm1, ym1, xm2, ym2);
-      // noStroke();
-      // circle(xm1, ym1, speed);
-      noFill();
-      // fill(speed, speed, speed, speed);
-      // console.log(speedRoutes[j][k]);
-      // let segments = 50;
-      // let padding = 500;
-      // for (let x = padding; x < width + padding; x += segments) {
-      //   numSegments = 1;
-      //   dashedLine(xm1, ym1 - padding, homeX, homeY + padding, numSegments);
-      // }
+  if (j <= lonRoutes.length) {
+    k++;
+    if (k == lonRoutes[j].length) {
+      if (j < lonRoutes.length) {
+        j++;
+        k = 0;
+      }
     }
   }
+
+  console.log(frameRate());
 }
+// }
+// }
